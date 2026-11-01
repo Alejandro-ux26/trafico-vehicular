@@ -15,6 +15,7 @@ Frontend (React, pendiente) -> Backend FastAPI -> MongoDB (series temporales)
 - `backend/`    API, autenticación JWT, roles (usuario/operador/admin), fuentes, trabajos, conteos, auditoría.
 - `ai-service/` Microservicio de IA: `/process` devuelve conteos + metadatos (versión, parámetros, FPS).
 - `frontend/`   Pendiente (React + Vite).
+- `notebooks/`  Notebook de evaluación (Jupyter): compara realidad vs baseline vs YOLO26 y registra todo en MongoDB.
 - `docs/`       Requisitos, diagramas, informe. Ver `docs/ENTREGABLES.md`.
 - `data/`       Videos subidos (no se versiona). `models/` pesos de YOLO26 (no se versiona).
 
@@ -52,3 +53,16 @@ Pruebas del servicio IA: `pip install -r ai-service/requirements-dev.txt` y `cd 
 - [ ] Probar el flujo completo con sus videos y ajustar la línea de conteo.
 - [ ] Anotar conteos manuales (verdad de terreno) y medir error de conteo, mAP, FPS, MAE.
 - [ ] Frontend, pruebas de API/integración, CI, informe y demo.
+
+## Notebook de evaluación (Jupyter)
+`notebooks/Notebook_Trafico_Vehicular.ipynb` lee de MongoDB los trabajos ya procesados, los compara con el
+conteo manual (verdad de terreno) y guarda la evaluación en `evaluations` (también `ground_truth` y `model_versions`).
+Las gráficas y los CSV quedan en `notebooks/resultados/`.
+```
+conda activate trafico
+pip install -r notebooks\requirements-notebook.txt
+docker compose up mongo -d
+jupyter notebook
+```
+Abre el notebook y ejecuta las celdas en orden. Para sumar videos, procésalos con la plataforma (yolo26 y baseline),
+cuéntalos a mano y agrégalos a `GROUND_TRUTH` (sección 3).
