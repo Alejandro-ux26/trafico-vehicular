@@ -12,4 +12,4 @@ MAX_UPLOAD_MB = int(os.getenv("MAX_UPLOAD_MB", "200"))
 ALLOWED_VIDEO_EXT = {".mp4", ".avi", ".mov", ".mkv"}
 ADMIN_USER = os.getenv("ADMIN_USER", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin12345")
-CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000,http://localhost:5173,http://127.0.0.1:5173").split(",")

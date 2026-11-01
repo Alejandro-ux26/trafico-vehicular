@@ -35,7 +35,7 @@ def run_job(job_id) -> None:
             base = base.replace(tzinfo=timezone.utc)
         docs = [{
             "ts": base + timedelta(seconds=c["interval_start_s"]),
-            "meta": {"source_id": job["source_id"], "job_id": str(job_id),
+            "meta": {"source_id": job["source_id"], "job_id": str(job_id), "method": job["method"],
                      "category": c["category"], "direction": c["direction"]},
             "count": c["count"],
             "interval_seconds": job["interval_seconds"],
@@ -110,3 +110,19 @@ def get_job(job_id: str, _: dict = Depends(get_current_user)):
     if not j:
         raise HTTPException(404, "Trabajo no encontrado")
     return serialize(j)
+
+
+@router.get("/{job_id}/intervals")
+def job_intervals(job_id: str, _: dict = Depends(get_current_user)):
+    """Conteos de un trabajo agrupados por intervalo (segundos desde el inicio del video)."""
+    j = db.jobs.find_one({"_id": oid(job_id)})
+    if not j:
+        raise HTTPException(404, "Trabajo no encontrado")
+    base = j["recorded_at"].replace(tzinfo=None)
+    acumulado: dict = {}
+    for d in db.counts.find({"meta.job_id": job_id}):
+        offset = int(round((d["ts"].replace(tzinfo=None) - base).total_seconds()))
+        clave = (offset, d["meta"]["category"])
+        acumulado[clave] = acumulado.get(clave, 0) + d["count"]
+    items = [{"interval_start_s": k[0], "category": k[1], "count": v} for k, v in sorted(acumulado.items())]
+    return {"interval_seconds": j["interval_seconds"], "items": items}

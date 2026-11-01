@@ -1,0 +1,81 @@
+:root {
+  --fondo: #f4f6f9; --panel: #ffffff; --texto: #1d2733; --suave: #5b6b7c; --borde: #d5dce4;
+  --primario: #2f5d8c; --primario-texto: #ffffff; --ok: #1f7a4d; --alerta: #a35a00; --error: #b3261e;
+  --ok-fondo: #e3f4ea; --alerta-fondo: #fff1dc; --error-fondo: #fde7e5; --info-fondo: #e6eef7;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #12171d; --panel: #1b222b; --texto: #e7edf3; --suave: #9fb0c0; --borde: #33404d;
+    --primario: #6fa3d6; --primario-texto: #0d1319; --ok: #6fd0a0; --alerta: #f0b866; --error: #ff8a80;
+    --ok-fondo: #173326; --alerta-fondo: #3a2c12; --error-fondo: #3d1b19; --info-fondo: #1d2b3a;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif; background: var(--fondo); color: var(--texto); line-height: 1.45; }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .6rem; }
+h1 { font-size: 1.5rem; } h2 { font-size: 1.25rem; } h3 { font-size: 1.05rem; }
+a { color: var(--primario); }
+.saltar { position: absolute; left: -999px; top: 0; background: var(--panel); padding: .5rem 1rem; z-index: 10; }
+.saltar:focus { left: .5rem; top: .5rem; }
+:focus-visible { outline: 3px solid var(--primario); outline-offset: 2px; }
+
+.cabecera { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; align-items: center; justify-content: space-between;
+  padding: .75rem 1.25rem; background: var(--panel); border-bottom: 1px solid var(--borde); }
+.cabecera .titulo { font-weight: 700; font-size: 1.1rem; }
+.usuario { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; color: var(--suave); }
+.estado { display: flex; gap: .4rem; flex-wrap: wrap; }
+.chip { font-size: .8rem; padding: .15rem .55rem; border-radius: 999px; border: 1px solid var(--borde); }
+.chip.ok { background: var(--ok-fondo); color: var(--ok); border-color: transparent; }
+.chip.mal { background: var(--error-fondo); color: var(--error); border-color: transparent; }
+nav.pestanas { display: flex; gap: .25rem; flex-wrap: wrap; padding: .5rem 1.25rem 0; border-bottom: 1px solid var(--borde); background: var(--panel); }
+nav.pestanas button { border: 1px solid transparent; border-bottom: 0; background: transparent; color: var(--texto);
+  padding: .55rem .9rem; border-radius: 8px 8px 0 0; cursor: pointer; font: inherit; }
+nav.pestanas button[aria-current="page"] { background: var(--fondo); border-color: var(--borde); font-weight: 700; color: var(--primario); }
+main { max-width: 1100px; margin: 0 auto; padding: 1.25rem; }
+.panel { background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1.1rem; }
+.cuadricula { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.tarjeta { background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; padding: .9rem 1.1rem; }
+.tarjeta .valor { font-size: 1.9rem; font-weight: 700; }
+.tarjeta .etiqueta { color: var(--suave); font-size: .85rem; }
+
+form.formulario { display: grid; gap: .8rem; max-width: 560px; }
+label { display: grid; gap: .25rem; font-weight: 600; font-size: .92rem; }
+label small { font-weight: 400; color: var(--suave); }
+input, select, textarea { font: inherit; padding: .5rem .6rem; border: 1px solid var(--borde); border-radius: 8px; background: var(--fondo); color: var(--texto); width: 100%; }
+input[type="checkbox"] { width: auto; }
+.fila { display: flex; gap: .6rem; flex-wrap: wrap; align-items: end; }
+.fila > * { flex: 1 1 110px; }
+button.boton, a.boton { font: inherit; background: var(--primario); color: var(--primario-texto); border: 0; border-radius: 8px; padding: .55rem 1rem; cursor: pointer; font-weight: 600; text-decoration: none; display: inline-block; }
+button.boton.secundario { background: transparent; color: var(--primario); border: 1px solid var(--primario); }
+button.boton:disabled { opacity: .55; cursor: not-allowed; }
+.aviso { padding: .65rem .9rem; border-radius: 8px; margin: .6rem 0; }
+.aviso.error { background: var(--error-fondo); color: var(--error); }
+.aviso.ok { background: var(--ok-fondo); color: var(--ok); }
+.aviso.info { background: var(--info-fondo); }
+.aviso.alerta { background: var(--alerta-fondo); color: var(--alerta); }
+.envoltura-tabla { overflow-x: auto; }
+table.tabla { border-collapse: collapse; width: 100%; font-size: .92rem; }
+table.tabla caption { text-align: left; font-weight: 700; padding: .3rem 0; }
+table.tabla th, table.tabla td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--borde); white-space: nowrap; }
+table.tabla th { color: var(--suave); font-weight: 600; }
+.estado-trabajo { font-weight: 700; }
+.estado-trabajo.completado { color: var(--ok); } .estado-trabajo.error { color: var(--error); }
+.estado-trabajo.procesando, .estado-trabajo.pendiente { color: var(--alerta); }
+.grafica { margin: .6rem 0 1rem; }
+.grafica svg { width: 100%; height: auto; max-width: 640px; display: block; }
+.grafica .eje { fill: var(--suave); font-size: 11px; }
+.grafica .valor-barra { fill: var(--texto); font-size: 11px; font-weight: 600; }
+.grafica .rejilla { stroke: var(--borde); stroke-width: 1; }
+.grafica figcaption { font-weight: 700; margin-bottom: .2rem; }
+.leyenda { list-style: none; display: flex; gap: .9rem; flex-wrap: wrap; padding: 0; margin: .3rem 0 0; font-size: .85rem; }
+.leyenda .cuadro { display: inline-block; width: .8rem; height: .8rem; margin-right: .35rem; border-radius: 2px; vertical-align: middle; }
+.solo-lectores { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.vista-linea { border: 1px solid var(--borde); border-radius: 6px; background: var(--fondo); }
+.cargando { padding: 2rem; text-align: center; color: var(--suave); }
+.acceso { max-width: 420px; margin: 8vh auto; }
+.muted { color: var(--suave); }
+dl.datos { display: grid; grid-template-columns: max-content 1fr; gap: .3rem 1rem; margin: 0; }
+dl.datos dt { color: var(--suave); } dl.datos dd { margin: 0; word-break: break-word; }
+pre { overflow-x: auto; background: var(--fondo); padding: .7rem; border-radius: 8px; font-size: .8rem; }
+@media (max-width: 640px) { main { padding: .8rem; } .cabecera { padding: .6rem .8rem; } }

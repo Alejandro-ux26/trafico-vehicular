@@ -9,7 +9,7 @@
 | Diagramas (contexto, componentes, secuencia, despliegue) | pendiente | |
 | Modelo de datos (Mongo: users, sources, jobs, counts, audit_log) | borrador en el código | |
 | Repositorio Git | pendiente | |
-| Aplicación ejecutable (backend + frontend) | backend listo, frontend pendiente | |
+| Aplicación ejecutable (backend + frontend) | backend y frontend listos (falta probar el frontend en el navegador) | |
 | Servicio IA | listo (sin probar con video real) | |
 | Dataset o instrucciones reproducibles | pendiente | |
 | Modelo versionado (ver `ai_meta` en cada job) | listo | |

@@ -1,12 +1,17 @@
+import mimetypes
+import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from . import config
 from .db import db, init_db
-from .routers import auth, counts, jobs, sources
+from .routers import auth, counts, evaluations, jobs, sources
 
 
 @asynccontextmanager
@@ -17,7 +22,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Plataforma de análisis de tráfico vehicular", version="0.1.0", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_methods=["*"], allow_headers=["*"])
-for r in (auth.router, sources.router, jobs.router, counts.router):
+for r in (auth.router, sources.router, jobs.router, counts.router, evaluations.router):
     app.include_router(r)
 
 
@@ -34,3 +39,16 @@ def health():
     except Exception:  # noqa: BLE001
         status["ai_service"] = "error"
     return status
+
+
+# Frontend web (React sin compilación) servido por el propio backend en /app
+FRONTEND_DIR = Path(os.getenv("FRONTEND_DIR", Path(__file__).resolve().parents[2] / "frontend"))
+if FRONTEND_DIR.is_dir():
+    # En Windows el registro a veces asocia .js con text/plain y el navegador rechaza los módulos
+    mimetypes.add_type("text/javascript", ".js")
+    mimetypes.add_type("text/css", ".css")
+    app.mount("/app", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
+
+    @app.get("/", include_in_schema=False)
+    def raiz():
+        return RedirectResponse("/app/")

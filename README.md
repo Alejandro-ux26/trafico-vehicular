@@ -5,7 +5,7 @@ identificar personas, y analiza el flujo en el tiempo. IA: YOLO26 + ByteTrack (C
 baseline OpenCV (MOG2).
 
 ```
-Frontend (React, pendiente) -> Backend FastAPI -> MongoDB (series temporales)
+Frontend (React, en /app) -> Backend FastAPI -> MongoDB (series temporales)
                                     |
                                     v
                          Servicio IA FastAPI (YOLO26 | baseline)
@@ -14,7 +14,7 @@ Frontend (React, pendiente) -> Backend FastAPI -> MongoDB (series temporales)
 ## Estructura
 - `backend/`    API, autenticación JWT, roles (usuario/operador/admin), fuentes, trabajos, conteos, auditoría.
 - `ai-service/` Microservicio de IA: `/process` devuelve conteos + metadatos (versión, parámetros, FPS).
-- `frontend/`   Pendiente (React + Vite).
+- `frontend/`   Interfaz web (React 18 sin compilación), servida por el backend en `/app`.
 - `notebooks/`  Notebook de evaluación (Jupyter): compara realidad vs baseline vs YOLO26 y registra todo en MongoDB.
 - `docs/`       Requisitos, diagramas, informe. Ver `docs/ENTREGABLES.md`.
 - `data/`       Videos subidos (no se versiona). `models/` pesos de YOLO26 (no se versiona).
@@ -66,3 +66,8 @@ jupyter notebook
 ```
 Abre el notebook y ejecuta las celdas en orden. Para sumar videos, procésalos con la plataforma (yolo26 y baseline),
 cuéntalos a mano y agrégalos a `GROUND_TRUTH` (sección 3).
+
+## Interfaz web
+Con el backend encendido, abre **http://127.0.0.1:8000/app/** (también `http://127.0.0.1:8000/`).
+Entra con el administrador del `.env` (por defecto `admin` / `admin12345`) o crea una cuenta.
+Pantallas: procesar video, trabajos, dashboard, evaluación del modelo y administración. Detalles en `frontend/README.md`.

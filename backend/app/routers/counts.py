@@ -10,23 +10,25 @@ from ..utils import serialize
 router = APIRouter(tags=["counts"])
 
 
-def _match(source_id, job_id, start, end) -> dict:
+def _match(source_id, job_id, start, end, method=None) -> dict:
     m: dict = {}
     if source_id:
         m["meta.source_id"] = source_id
     if job_id:
         m["meta.job_id"] = job_id
+    if method:
+        m["meta.method"] = method  # solo existe en trabajos nuevos
     if start or end:
         m["ts"] = {**({"$gte": start} if start else {}), **({"$lte": end} if end else {})}
     return m
 
 
 @router.get("/counts/summary")
-def summary(source_id: Optional[str] = None, job_id: Optional[str] = None,
+def summary(source_id: Optional[str] = None, job_id: Optional[str] = None, method: Optional[str] = None,
             start: Optional[datetime] = None, end: Optional[datetime] = None,
             _: dict = Depends(get_current_user)):
     """Total de vehículos por categoría y dirección."""
-    pipe = [{"$match": _match(source_id, job_id, start, end)},
+    pipe = [{"$match": _match(source_id, job_id, start, end, method)},
             {"$group": {"_id": {"category": "$meta.category", "direction": "$meta.direction"},
                         "count": {"$sum": "$count"}}},
             {"$sort": {"_id.category": 1}}]
@@ -36,11 +38,11 @@ def summary(source_id: Optional[str] = None, job_id: Optional[str] = None,
 
 @router.get("/counts/series")
 def series(unit: Literal["minute", "hour", "day"] = "minute",
-           source_id: Optional[str] = None, job_id: Optional[str] = None,
+           source_id: Optional[str] = None, job_id: Optional[str] = None, method: Optional[str] = None,
            start: Optional[datetime] = None, end: Optional[datetime] = None,
            _: dict = Depends(get_current_user)):
     """Serie temporal agregada por unidad de tiempo y categoría (insumo del dashboard)."""
-    pipe = [{"$match": _match(source_id, job_id, start, end)},
+    pipe = [{"$match": _match(source_id, job_id, start, end, method)},
             {"$group": {"_id": {"t": {"$dateTrunc": {"date": "$ts", "unit": unit}}, "category": "$meta.category"},
                         "count": {"$sum": "$count"}}},
             {"$sort": {"_id.t": 1}}]
