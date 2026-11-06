@@ -1,5 +1,5 @@
 ﻿video,method,real_total,predicho_total,error_abs_suma,error_conteo_total_%,error_abs_categoria_%,MAE_por_categoria,FPS
-VideoPrueba-ParaBigdata1.mp4,baseline,30,32,20,6.7,66.7,5.0,57.94
-VideoPrueba-ParaBigdata1.mp4,yolo26,30,20,10,-33.3,33.3,2.5,13.05
-VideoPrueba-ParaBigdata2.mp4,baseline,24,36,12,50.0,50.0,3.0,65.95
-VideoPrueba-ParaBigdata2.mp4,yolo26,24,17,9,-29.2,37.5,2.25,15.48
+VideoPrueba-ParaBigdata1.mp4,baseline,30,32,20,6.7,66.7,5.0,116.56
+VideoPrueba-ParaBigdata1.mp4,yolo26,30,21,9,-30.0,30.0,2.25,15.55
+VideoPrueba-ParaBigdata2.mp4,baseline,24,36,12,50.0,50.0,3.0,58.47
+VideoPrueba-ParaBigdata2.mp4,yolo26,24,17,9,-29.2,37.5,2.25,21.68
